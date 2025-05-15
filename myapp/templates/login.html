@@ -1,0 +1,200 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Login - New_Marketplace</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+    }
+
+    body {
+      background: url('{% static 'login.jpeg' %}') no-repeat center center fixed;
+      background-size: cover;
+      color: white;
+    }
+
+    .container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .form-container {
+      background-color: rgba(0, 0, 0, 0.7);
+      padding: 2rem;
+      border-radius: 10px;
+      max-width: 400px;
+      width: 100%;
+      text-align: center;
+    }
+
+    .form-container img {
+      height: 60px;
+      margin-bottom: 15px;
+    }
+
+    footer {
+      background: rgba(0, 0, 0, 0.5);
+      color: #ddd;
+      padding: 10px 0;
+      font-size: 0.85rem;
+    }
+
+    .forgot-password-link {
+      color: #fff;
+      text-decoration: none;
+      font-size: 0.9rem;
+      margin-top: 10px;
+    }
+
+    .forgot-password-link:hover {
+      text-decoration: underline;
+    }
+
+    .forgot-password-container {
+      display: none;
+    }
+
+    .password-container {
+      position: relative;
+    }
+
+    .password-container input {
+      width: 100%;
+    }
+
+    .password-container .toggle-password {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: transparent;
+      border: none;
+      color: white;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Login Form -->
+    <form id="login-form" onsubmit="handleLogin(event)" class="form-container">
+      <img src="{% static 'logo.png' %}" alt="Logo" style="height: 100px; width: auto;">
+      <h4 class="mb-3">Login to Your Account</h4>
+      <input type="email" id="email" placeholder="Email" class="form-control mb-3" required>
+      <input type="password" id="password" placeholder="Password" class="form-control mb-3" required>
+      <div class="form-check mb-3">
+        <input type="checkbox" class="form-check-input" id="rememberMe">
+        <label class="form-check-label" for="rememberMe">Remember me</label>
+      </div>
+      <button type="submit" class="btn btn-warning w-100 mb-2">Login</button>
+      <a href="{% url 'index' %}" class="btn btn-secondary w-100">Go Back</a>
+
+      <!-- Forgot Password Link -->
+      <a href="javascript:void(0);" class="forgot-password-link" onclick="showForgotPassword()">Forgot your password?</a>
+    </form>
+
+    <!-- Forgot Password Form -->
+    <div id="forgot-password-container" class="forgot-password-container form-container">
+      <h4 class="mb-3">Reset Your Password</h4>
+      <input type="email" id="reset-email" placeholder="Enter your email" class="form-control mb-3" required>
+      <input type="password" id="reset-pin" placeholder="Enter your 4-digit Account PIN" class="form-control mb-3" maxlength="4" required>
+      <input type="text" id="security-question-answer" placeholder="Answer to security question" class="form-control mb-3" required>
+
+      <div class="password-container mb-3">
+        <input type="password" id="new-password" placeholder="Enter New Password" class="form-control mb-3" required>
+        <button type="button" class="toggle-password" onclick="togglePasswordVisibility('new-password')">👁️</button>
+      </div>
+      <div class="password-container mb-3">
+        <input type="password" id="confirm-password" placeholder="Confirm New Password" class="form-control mb-3" required>
+        <button type="button" class="toggle-password" onclick="togglePasswordVisibility('confirm-password')">👁️</button>
+      </div>
+
+      <button type="button" class="btn btn-warning w-100 mb-2" onclick="handleForgotPassword()">Change Password</button>
+      <button type="button" class="btn btn-secondary w-100" onclick="goBackToLogin()">Back to Login</button>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="text-center mt-4">
+    <hr class="bg-light">
+    <p>&copy; 2025 New_Market. All rights reserved.</p>
+  </footer>
+
+  <script>
+    // Check if credentials are stored in localStorage
+    window.onload = function() {
+      if (localStorage.getItem("rememberMe") === "true") {
+        document.getElementById("email").value = localStorage.getItem("email");
+        document.getElementById("password").value = localStorage.getItem("password");
+        document.getElementById("rememberMe").checked = true;
+      }
+    };
+
+    function handleLogin(event) {
+      event.preventDefault();
+
+      // Get user input
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+      const rememberMe = document.getElementById("rememberMe").checked;
+
+      // Simulate login process
+      if (rememberMe) {
+        localStorage.setItem("email", email);
+        localStorage.setItem("password", password);
+        localStorage.setItem("rememberMe", "true");
+      } else {
+        localStorage.removeItem("email");
+        localStorage.removeItem("password");
+        localStorage.setItem("rememberMe", "false");
+      }
+
+      // Redirect to home page
+      window.location.href = "{% url 'home' %}";
+    }
+
+    // Show the forgot password form
+    function showForgotPassword() {
+      document.getElementById("login-form").style.display = "none";
+      document.getElementById("forgot-password-container").style.display = "block";
+    }
+
+    // Toggle password visibility
+    function togglePasswordVisibility(fieldId) {
+      const field = document.getElementById(fieldId);
+      const type = field.type === "password" ? "text" : "password";
+      field.type = type;
+    }
+
+    // Handle forgot password functionality (removed backend verification)
+    function handleForgotPassword() {
+      const newPassword = document.getElementById("new-password").value;
+      const confirmPassword = document.getElementById("confirm-password").value;
+
+      if (newPassword === confirmPassword) {
+        // No alert anymore, just redirect to login page
+        window.location.href = "{% url 'login' %}";  // Redirect to login page after success
+      } else {
+        alert("Passwords do not match.");
+      }
+    }
+
+    // Go back to login form
+    function goBackToLogin() {
+      document.getElementById("forgot-password-container").style.display = "none";
+      document.getElementById("login-form").style.display = "block";
+    }
+  </script>
+</body>
+</html>

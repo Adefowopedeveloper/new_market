@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>New_Market - Explore Foods</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+    }
+
+    /* Navbar */
+    .navbar {
+      background-color: black;
+    }
+
+    .nav-link {
+      color: white !important;
+    }
+
+    .navbar-brand img {
+      height: 75px;
+      width: auto;
+    }
+
+    /* Hero Section */
+    .hero {
+      position: relative;
+      height: 50vh;
+      background-image: url('food-hero.jpg');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .hero-text {
+      color: white;
+      text-align: center;
+      max-width: 700px;
+      padding: 2rem;
+      background: rgba(0, 0, 0, 0.4);
+      border-radius: 8px;
+    }
+
+    .hero-text h1 {
+      font-size: 2.7rem;
+      font-weight: 600;
+    }
+
+    .hero-text p {
+      font-size: 1.1rem;
+      margin-top: 1rem;
+    }
+
+    /* Food Categories */
+    .categories {
+      padding: 2rem 0;
+      background-color: #f8f9fa;
+    }
+
+    .category-card {
+      background-color: white;
+      color: black;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      text-align: center;
+      padding: 1rem;
+      cursor: pointer;
+    }
+
+    .category-card img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+    }
+
+    .category-card h5 {
+      margin-top: 1rem;
+    }
+
+    /* Featured Foods Carousel */
+    .featured-foods {
+      padding: 3rem 0;
+    }
+
+    .carousel-item img {
+      height: 400px;
+      object-fit: cover;
+    }
+
+    /* Food Items */
+    .food-listing {
+      padding: 3rem 0;
+    }
+
+    .food-item-card {
+      background-color: white;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      margin-bottom: 1.5rem;
+    }
+
+    .food-item-card img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+    }
+
+    .food-item-card .content {
+      padding: 1rem;
+    }
+
+    .food-item-card h5 {
+      font-size: 1.25rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .food-item-card p {
+      font-size: 1rem;
+      color: #6c757d;
+    }
+
+    /* Footer */
+    footer {
+      padding: 1rem;
+      background-color: #343a40;
+      color: white;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-dark">
+    <div class="container">
+      <a class="navbar-brand" href="home.html">
+        <img src="logo.png" alt="Logo">
+      </a>
+  </nav>
+
+  <!-- Hero Section -->
+  <div class="hero">
+    <div class="hero-text">
+      <h1>Explore New_Market Foods</h1>
+      <p>Discover a variety of local, home-made food offerings from sellers near you. Whether you are craving snacks, full meals, or beverages, find it all right here!</p>
+    </div>
+  </div>
+
+  <!-- Categories Section -->
+  <div class="container categories">
+    <div class="row">
+      <!-- Dynamic Category Cards (Example: Snacks, Beverages, etc.) -->
+      <div class="col-md-3">
+        <div class="category-card">
+          <img src="snacks.jpg" alt="Snacks">
+          <h5>Snacks</h5>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="category-card">
+          <img src="beverages.jpg" alt="Beverages">
+          <h5>Beverages</h5>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="category-card">
+          <img src="meals.jpg" alt="Meals">
+          <h5>Meals</h5>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="category-card">
+          <img src="desserts.jpg" alt="Desserts">
+          <h5>Desserts</h5>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Featured Foods Carousel -->
+  <div class="container featured-foods">
+    <h3 class="text-center mb-4">Featured Foods</h3>
+    <div id="featuredFoodsCarousel" class="carousel slide" data-bs-ride="carousel">
+      <div class="carousel-inner" id="carouselItems"></div>
+      <button class="carousel-control-prev" type="button" data-bs-target="#featuredFoodsCarousel" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      </button>
+      <button class="carousel-control-next" type="button" data-bs-target="#featuredFoodsCarousel" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Food Listings -->
+  <div class="container food-listing">
+    <h3 class="text-center mb-4">Browse Food Listings</h3>
+    <div class="row" id="foodItems"></div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2025 New_Market. All rights reserved.</p>
+  </footer>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Dynamic Food Items Script -->
+  <script>
+    // On page load, populate the food section dynamically from localStorage
+    window.onload = function() {
+      const featuredFoods = JSON.parse(localStorage.getItem('featured_foods')) || [];
+      const foodItems = JSON.parse(localStorage.getItem('food_items')) || [];
+
+      const carouselItems = document.getElementById('carouselItems');
+      const foodItemsContainer = document.getElementById('foodItems');
+
+      // Populate Featured Foods Carousel
+      if (featuredFoods.length > 0) {
+        featuredFoods.forEach((food, index) => {
+          const isActive = index === 0 ? 'active' : '';
+          const carouselItem = `
+            <div class="carousel-item ${isActive}">
+              <img src="${food.image}" class="d-block w-100" alt="${food.name}">
+            </div>
+          `;
+          carouselItems.innerHTML += carouselItem;
+        });
+      }
+
+      // Populate Food Listings
+      if (foodItems.length > 0) {
+        foodItems.forEach(food => {
+          const foodCard = `
+            <div class="col-md-4">
+              <div class="food-item-card">
+                <img src="${food.image}" alt="${food.name}">
+                <div class="content">
+                  <h5>${food.name}</h5>
+                  <p>${food.description}</p>
+                  <a href="food-details.html?id=${food.id}" class="btn btn-warning">View Details</a>
+                </div>
+              </div>
+            </div>
+          `;
+          foodItemsContainer.innerHTML += foodCard;
+        });
+      }
+    };
+  </script>
+
+</body>
+</html>

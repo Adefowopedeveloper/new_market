@@ -1,0 +1,398 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Profile and Listings</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <style>
+    body {
+      background-color: #f4f4f9;
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh; /* Ensure body takes at least full height */
+    }
+
+    .container-wrapper {
+      display: flex;
+      transition: transform 0.5s ease;
+      width: 300%;
+      flex-grow: 1; /* Make sure content area fills available space */
+    }
+
+    .profile-wrapper, .listing-wrapper, .post-item-wrapper {
+      width: 100vw;
+      min-height: 100vh;
+      padding: 30px;
+      box-sizing: border-box;
+    }
+
+    .profile-wrapper, .listing-wrapper {
+      background-color: rgba(0, 0, 0, 0.75); /* Black background with opacity */
+      color: white; /* White text to contrast with the dark background */
+    }
+
+    .profile-wrapper {
+      box-shadow: none; /* Remove the shadow to fit the background better */
+    }
+
+    .listing-wrapper {
+      background-color: #ffffff; /* Lighter background for readability */
+      color: #333; /* Darker text for contrast */
+      overflow-y: auto;
+      padding: 30px;
+      border-radius: 10px; /* Round the corners for a modern look */
+    }
+
+    .post-item-wrapper {
+      background: url('A_flat-style,_digital_illustration_background_desi.png') no-repeat center center fixed;
+      background-size: cover;
+      color: white;
+      overflow-y: auto;
+      padding-top: 20px;
+    }
+
+    .slide-left {
+      transform: translateX(-100vw);
+    }
+
+    .slide-far-left {
+      transform: translateX(-200vw);
+    }
+
+    /* Card containing profile image */
+    .image-card-wrapper {
+      position: relative;
+      width: 100%;
+      height: 250px; /* Not too tall */
+      background: url('{% static 'home.jpg' %}') no-repeat center center;
+      background-size: cover;
+      border-radius: 10px;
+      margin-bottom: 30px;
+    }
+
+    /* Profile image inside the card, centered */
+    .profile-img-wrapper {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%); /* Center the image */
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      border: 4px solid white;
+      box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
+      overflow: hidden;
+    }
+
+    .profile-img-preview {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .btn-container {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+
+    .listing-card {
+      background-color: #fafafa; /* Slightly lighter background for each listing */
+      border: 1px solid #ddd;
+      padding: 15px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* Soft shadow for elevation */
+    }
+
+    .listing-card img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      border-radius: 5px;
+      margin-bottom: 10px;
+    }
+
+    .listing-card h5 {
+      color: #333; /* Darker color for titles */
+    }
+
+    .listing-card p {
+      color: #555; /* Slightly lighter color for text */
+    }
+
+    .listing-card:hover {
+      transform: translateY(-5px);
+      transition: transform 0.3s ease-in-out;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    #updateProfileBtn:disabled {
+      background-color: #d3d3d3;
+      cursor: not-allowed;
+    }
+
+    .content-wrapper {
+      background-color: rgba(0, 0, 0, 0.75); /* Keep black background for content in post-item-wrapper */
+      padding: 2rem;
+      border-radius: 10px;
+      margin-top: 2rem;
+    }
+
+    .no-listings-message {
+      font-size: 1.2rem;
+      color: #333; /* Darker text for better contrast */
+      text-align: center;
+      margin-top: 50px;
+      font-weight: bold; /* Add some emphasis */
+    }
+
+    footer {
+      background-color: transparent;
+      color: white;
+      padding: 5px 0;  /* Reduced padding */
+      text-align: center;
+      font-size: 0.9rem;
+      margin-top: auto;
+    }
+    .center-content {
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 20px 15px;
+      background-color: #fff;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .form-control, .form-select {
+      border-radius: 10px;
+      border: 1px solid #ddd;
+    }
+
+    h2, h4 {
+      color: #333;
+    }
+
+    h2.text-warning {
+      font-size: 2.5rem;
+    }
+
+    .btn-outline-primary, .btn-outline-success, .btn-outline-danger, .btn-outline-warning {
+      font-weight: bold;
+    }
+
+    .btn-outline-dark, .btn-secondary {
+      font-weight: normal;
+    }
+  </style>
+</head>
+<body>
+  <div id="containerWrapper" class="container-wrapper">
+    <div class="profile-wrapper">
+      <div class="image-card-wrapper">
+        <div class="profile-img-wrapper">
+          <img id="profileImagePreview" src="profile-image.jpg" alt="Profile" class="profile-img-preview">
+        </div>
+      </div>
+
+      <div class="center-content">
+        <div class="btn-container">
+          <button class="btn btn-outline-dark" onclick="goBack()">Back to Home</button>
+          <button id="updateProfileBtn" class="btn btn-warning" disabled>Update Profile</button>
+          <button class="btn btn-outline-success" onclick="showListings()">View My Listings</button>
+          <a href="{% url 'index' %}" class="btn btn-secondary">Logout</a>
+        </div>
+
+        <form id="profileForm">
+          <input type="text" class="form-control mb-3" placeholder="Full Name" name="full_name" value="John Doe" disabled>
+          <input type="tel" class="form-control mb-3" placeholder="Phone Number" name="phone_number" id="phone_number" value="">
+          <input type="file" class="form-control mb-3" accept="image/*" id="profileImageInput" name="profile_picture">
+        </form>
+
+        <h4 class="my-3">Post New Listing</h4>
+        <button class="btn btn-outline-primary m-1" onclick="showPostItem('general')">Post Item for Sale</button>
+        <button class="btn btn-outline-success m-1" onclick="showPostItem('rent')">Post House for Rent</button>
+        <button class="btn btn-outline-danger m-1" onclick="showPostItem('sell')">Post House for Sale</button>
+        <button class="btn btn-outline-warning m-1" onclick="showPostItem('car')">Post Car</button>
+      </div>
+
+      <footer class="mt-4">
+        <hr class="bg-light">
+        <p>&copy; 2025 New_Market. All rights reserved.</p>
+      </footer>
+    </div>
+
+    <div class="listing-wrapper">
+      <button class="btn btn-dark mb-3" onclick="hideListings()">← Back to Profile</button>
+      <h4 class="mb-3">My Listings</h4>
+      <div id="listingContainer">
+        <div class="no-listings-message">
+          You don’t have any listings yet. You can post one now!
+        </div>
+      </div>
+    </div>
+
+    <div class="post-item-wrapper">
+      <div class="container content-wrapper">
+        <button type="button" class="btn btn-outline-light mb-3" onclick="hidePostItem()">← Go Back</button>
+        <h2 class="mb-4 text-warning">Post Items for Sale</h2>
+        <form id="itemForm"></form>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const containerWrapper = document.getElementById('containerWrapper');
+    const updateProfileBtn = document.getElementById('updateProfileBtn');
+    const phoneNumberInput = document.getElementById('phone_number');
+    const imageInput = document.getElementById('profileImageInput');
+    const imagePreview = document.getElementById('profileImagePreview');
+    const headerProfileImage = document.getElementById('headerProfileImage');
+
+    const storedImage = localStorage.getItem('userProfileImage');
+    if (storedImage) {
+      imagePreview.src = storedImage;
+    }
+
+    const storedPhoneNumber = localStorage.getItem('userPhoneNumber');
+    if (storedPhoneNumber) phoneNumberInput.value = storedPhoneNumber;
+
+    let profileChanged = false;
+    let imageChanged = false;
+
+    imageInput.addEventListener('change', function () {
+      const file = this.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        imagePreview.src = e.target.result;
+        imageChanged = true;
+        profileChanged = true;
+        updateProfileBtn.disabled = false;
+      };
+      reader.readAsDataURL(file);
+    });
+
+    phoneNumberInput.addEventListener('input', function () {
+      profileChanged = phoneNumberInput.value !== storedPhoneNumber;
+      updateProfileBtn.disabled = !profileChanged && !imageChanged;
+    });
+
+    updateProfileBtn.addEventListener('click', function () {
+      if (phoneNumberInput.value) {
+        localStorage.setItem('userPhoneNumber', phoneNumberInput.value);
+      }
+      if (imagePreview.src) {
+        localStorage.setItem('userProfileImage', imagePreview.src);
+      }
+      updateProfileBtn.disabled = true;
+    });
+
+    function goBack() {
+      window.location.href = "{% url 'home' %}";
+    }
+
+    function showListings() {
+      containerWrapper.classList.add('slide-left');
+      loadListings();
+    }
+
+    function hideListings() {
+      containerWrapper.classList.remove('slide-left');
+    }
+
+    function showPostItem(type) {
+      containerWrapper.classList.add('slide-left', 'slide-far-left');
+      window.scrollTo(0, 0);
+      const form = document.getElementById('itemForm');
+      form.innerHTML = '';
+
+      const titleHeader = document.querySelector('h2');
+      titleHeader.textContent = {
+        'general': 'Post Items for Sale',
+        'rent': 'Post House for Rent',
+        'sell': 'Post House for Sale',
+        'car': 'Post Car for Sale'
+      }[type];
+
+      const fields = [
+  ...(type === 'car' ? [
+    { label: 'Car Model', id: 'title', type: 'text' },
+    { label: 'Year', id: 'year', type: 'number' },
+    { label: 'Mileage (km)', id: 'mileage', type: 'number' },
+    { label: 'Condition', id: 'condition', type: 'select', options: ['New', 'Used'] },
+  ] : [
+    { label: (type === 'rent' || type === 'sell') ? 'House Type' : 'Item', id: 'title', type: 'text' }
+  ]),
+
+
+  { label: 'Street / House No.', id: 'street', type: 'text' },
+  { label: 'City', id: 'city', type: 'text' },
+  { label: 'State', id: 'state', type: 'select', options: ['Abia', 'Lagos'] },
+  { label: 'Description', id: 'description', type: 'textarea' },
+  { label: 'Price (₦)', id: 'price', type: 'number' },
+  { label: 'Upload Image', id: 'images', type: 'file' },
+];
+
+      fields.forEach(field => {
+        const div = document.createElement('div');
+        div.className = 'mb-3';
+        div.innerHTML = `<label for="${field.id}" class="form-label">${field.label}</label>`;
+        if (field.type === 'textarea') {
+          div.innerHTML += `<textarea class="form-control" id="${field.id}" rows="3" required></textarea>`;
+        } else if (field.type === 'select') {
+          div.innerHTML += `<select class="form-select" id="${field.id}" required>` +
+            `<option value="">Select ${field.label}</option>` +
+            field.options.map(opt => `<option value="${opt}">${opt}</option>`).join('') +
+            `</select>`;
+        } else {
+          div.innerHTML += `<input type="${field.type}" class="form-control" id="${field.id}" ${field.type !== 'file' ? 'required' : ''}/>`;
+        }
+        form.appendChild(div);
+      });
+
+      const postItemBtn = document.createElement('button');
+      postItemBtn.type = 'submit';
+      postItemBtn.classList.add('btn', 'btn-primary');
+      postItemBtn.textContent = 'Post Listing';
+      form.appendChild(postItemBtn);
+    }
+
+    function hidePostItem() {
+      containerWrapper.classList.remove('slide-left', 'slide-far-left');
+    }
+
+    function loadListings() {
+      const listings = localStorage.getItem('listings');
+      const listingContainer = document.getElementById('listingContainer');
+      listingContainer.innerHTML = '';
+
+      if (!listings) {
+        listingContainer.innerHTML = '<div class="no-listings-message">You don’t have any listings yet. You can post one now!</div>';
+        return;
+      }
+
+      const parsedListings = JSON.parse(listings);
+      parsedListings.forEach(listing => {
+        const listingCard = document.createElement('div');
+        listingCard.classList.add('listing-card');
+        listingCard.innerHTML = `
+          <img src="${listing.image}" alt="${listing.title}">
+          <h5>${listing.title}</h5>
+          <p>${listing.description}</p>
+          <p><strong>Price:</strong> ₦${listing.price}</p>
+        `;
+        listingContainer.appendChild(listingCard);
+      });
+    }
+  </script>
+</body>
+</html>

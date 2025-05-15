@@ -1,0 +1,220 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Rent House</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      background-color: #f8f9fa;
+    }
+
+    .top-image {
+      width: 100%;
+      height: 50vh;
+      background: url('{% static 'rentals.png' %}') center center / cover no-repeat;
+    }
+
+    .content-section {
+      background-color: #fff;
+      margin-top: -50px;
+      padding: 2rem;
+      border-radius: 20px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      position: relative;
+      z-index: 10;
+    }
+
+    .navbar-brand img {
+      max-height: 100px;
+      width: auto;
+      animation: glowText 2s ease-in-out infinite, lightning 4s infinite;
+    }
+
+    .nav-link.glow {
+      animation: glowText 2s ease-in-out infinite;
+    }
+
+    @keyframes glowText {
+      0%, 100% {
+        text-shadow: 0 0 8px #fff, 0 0 15px #ffc107, 0 0 30px #ffc107;
+      }
+      50% {
+        text-shadow: 0 0 12px #fff, 0 0 25px #ffea00, 0 0 40px #ffea00;
+      }
+    }
+
+    @keyframes lightning {
+      0%, 95%, 100% {
+        text-shadow: none;
+        filter: none;
+      }
+      96% {
+        text-shadow: 0 0 25px #fff, 0 0 50px #fff;
+        filter: drop-shadow(0 0 25px #fff);
+      }
+      97% {
+        text-shadow: 0 0 70px #fff, 0 0 100px #fff;
+        filter: drop-shadow(0 0 70px #fff);
+      }
+      98%, 99% {
+        text-shadow: 0 0 25px #fff, 0 0 50px #fff;
+        filter: drop-shadow(0 0 40px #fff);
+      }
+    }
+
+    .chat-popup {
+      position: fixed;
+      bottom: 80px;
+      right: 20px;
+      width: 300px;
+      max-height: 400px;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.2);
+      overflow: hidden;
+      display: none;
+      flex-direction: column;
+      z-index: 1050;
+    }
+
+    .chat-popup.show {
+      display: flex;
+    }
+
+    .social-sharing {
+      margin-top: 20px;
+      text-align: center;
+    }
+
+    .social-sharing a {
+      margin: 10px;
+      padding: 10px 20px;
+      background-color: #3b5998;
+      color: white;
+      text-decoration: none;
+      border-radius: 5px;
+    }
+
+    .social-sharing a:hover {
+      background-color: #2d4373;
+    }
+
+    .input-group {
+      width: 50%;
+      margin: 0 auto;
+    }
+
+    /* Profile Image Styling */
+    .profile-img {
+      width: 50px;
+      height: 50px;
+      object-fit: cover;
+      border-radius: 50%;
+      border: 2px solid #fff;
+      box-shadow: 0 0 5px rgba(0,0,0,0.2);
+    }
+  </style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar navbar-dark bg-dark">
+  <div class="container-fluid d-flex justify-content-between align-items-center">
+    <ul class="navbar-nav flex-row">
+      <li class="nav-item mx-2"><a class="nav-link text-white" href="{% url 'buy' %}">Explore Items</a></li>
+      <li class="nav-item mx-2"><a class="nav-link text-white" href="{% url 'rent' %}">See Rentals</a></li>
+      <li class="nav-item mx-2"><a class="nav-link text-white" href="{% url 'buy_house' %}">View Properties</a></li>
+      <li class="nav-item mx-2"><a class="nav-link text-white" href="{% url 'buy_car' %}">Buy a Car</a></li>
+    </ul>
+    <div class="position-absolute start-50 translate-middle-x">
+      <a class="navbar-brand" href="{% url 'home' %}">
+        <img src="{% static 'logo.png' %}" alt="Logo">
+      </a>
+    </div>
+    <div class="col d-flex justify-content-end">
+      <a href="{% url 'profile' %}">
+            <img id="profileImage" src="profile-image.jpg" alt="Profile Image" class="profile-img" />
+      </a>
+    </div>
+  </div>
+</nav>
+
+<!-- Banner -->
+<div class="top-image"></div>
+
+<!-- Main Content -->
+<div class="container content-section">
+  
+  <!-- Search Bar -->
+  <div class="input-group mb-3 shadow-sm">
+    <input type="text" id="houseSearch" class="form-control form-control-lg" placeholder="Search by house type, location" aria-label="Search">
+    <button class="btn btn-primary" type="button" onclick="searchHouses()">Search</button>
+  </div>
+
+  <div id="housesContainer">
+    <!-- Empty state for when no listings are available -->
+    <div class="alert alert-info">
+      <strong>Note:</strong> Listings will be available soon. Check back later.
+    </div>
+  </div>
+
+
+
+<!-- Chat Popup -->
+<div class="chat-popup shadow" id="chatPopup">
+  <div class="bg-primary text-white d-flex justify-content-between align-items-center p-2">
+    <strong>Chat with Owner</strong>
+    <button type="button" class="btn btn-sm btn-light" onclick="toggleChat()">×</button>
+  </div>
+  <div class="modal-body" id="chatMessages"></div>
+  <div class="chat-footer p-2 border-top">
+    <input type="text" class="form-control me-2" id="chatInput" placeholder="Type message...">
+    <button class="btn btn-primary btn-sm" id="sendMessage">Send</button>
+  </div>
+  <div class="d-flex justify-content-between p-2 border-top">
+    <button class="btn btn-danger btn-sm" id="deleteChat">Delete</button>
+    <div>
+      <button class="btn btn-warning btn-sm" id="blockUser">Block</button>
+      <button class="btn btn-secondary btn-sm d-none" id="unblockUser">Unblock</button>
+    </div>
+  </div>
+</div>
+
+<!-- Footer -->
+<footer class="text-center mt-5">
+  <hr class="bg-light">
+  <p>&copy; 2025 New_Market. All rights reserved.</p>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    const navProfileImage = document.getElementById('navProfileImage');
+    const storedProfileImage = localStorage.getItem('userProfileImage');
+    if (storedProfileImage) {
+      navProfileImage.src = storedProfileImage;
+    } else {
+      navProfileImage.src = 'profile-image.jpg'; // fallback image
+    }
+
+    // Function to render a message indicating listings are not available yet
+    function displayHouses() {
+      const housesContainer = document.getElementById('housesContainer');
+      housesContainer.innerHTML = `
+        <div class="alert alert-info">
+          <strong>Note:</strong> Listings will be available soon. Check back later.
+        </div>
+      `;
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      displayHouses();
+    });
+</script>
+
+</body>
+</html>

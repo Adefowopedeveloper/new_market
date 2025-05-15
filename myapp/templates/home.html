@@ -1,0 +1,324 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>New_Market - Home</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <style>
+    body,
+    html {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+    }
+
+    .hero {
+      position: relative;
+      height: 50vh;
+      background-image: url('{% static 'home.jpg' %}');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: transparent;
+      z-index: 1;
+    }
+
+    @keyframes dropDown {
+      from {
+        transform: translateY(-100vh);
+        opacity: 0;
+      }
+
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    @keyframes glowText {
+      0%,
+      100% {
+        text-shadow: 0 0 8px #fff, 0 0 15px #ffc107, 0 0 30px #ffc107;
+      }
+
+      50% {
+        text-shadow: 0 0 12px #fff, 0 0 25px #ffea00, 0 0 40px #ffea00;
+      }
+    }
+
+    @keyframes glowElement {
+      0%,
+      100% {
+        filter: drop-shadow(0 0 5px #ffc107);
+      }
+
+      50% {
+        filter: drop-shadow(0 0 10px #ffea00);
+      }
+    }
+
+    @keyframes lightning {
+      0%,
+      95%,
+      100% {
+        text-shadow: none;
+        filter: none;
+      }
+
+      96% {
+        text-shadow: 0 0 25px #fff, 0 0 50px #fff;
+        filter: drop-shadow(0 0 25px #fff);
+      }
+
+      97% {
+        text-shadow: 0 0 70px #fff, 0 0 100px #fff;
+        filter: drop-shadow(0 0 70px #fff);
+      }
+
+      98%,
+      99% {
+        text-shadow: 0 0 25px #fff, 0 0 50px #fff;
+        filter: drop-shadow(0 0 40px #fff);
+      }
+    }
+
+    .hero-text {
+      position: relative;
+      z-index: 2;
+      color: white;
+      max-width: 700px;
+      padding: 2rem;
+      opacity: 0;
+      text-align: left;
+      animation: dropDown 1s ease-out forwards, glowText 2s ease-in-out infinite, lightning 4s infinite;
+    }
+
+    .hero-text h1 {
+      font-size: 2.7rem;
+      font-weight: 600;
+      font-family: 'Segoe UI', 'Poppins', sans-serif;
+      padding: 0.5rem 1rem;
+      background: rgba(0, 0, 0, 0.4);
+      border-left: 4px solid #ffc107;
+      color: #fff;
+      box-shadow: 0 0 10px rgba(255, 193, 7, 0.4);
+      border-radius: 6px;
+    }
+
+    .hero-text p {
+      font-size: 1.08rem;
+      font-family: 'Segoe UI', 'Poppins', sans-serif;
+      padding: 0.5rem 1rem;
+      background: rgba(0, 0, 0, 0.4);
+      border-left: 4px solid #ffc107;
+      color: #fff;
+      box-shadow: 0 0 10px rgba(255, 193, 7, 0.4);
+      border-radius: 6px;
+    }
+
+    .main-section {
+      background-color: #fff;
+      padding: 3rem 1rem;
+    }
+
+    .section-card {
+      background-color: white;
+      color: black;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      max-width: 350px;
+      margin: 0 auto;
+    }
+
+    .section-card img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+    }
+
+    .navbar {
+      background-color: black;
+    }
+
+    .nav-link {
+      color: white !important;
+      display: block;
+      text-align: center;
+      margin: 0 10px;
+    }
+
+    .navbar-brand img {
+      height: 75px;
+      width: auto;
+      animation: glowElement 2s ease-in-out infinite, lightning 4s infinite;
+      animation-fill-mode: both;
+    }
+
+    .navbar .container {
+      max-width: 100%;
+    }
+
+    .navbar .row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .navbar .col {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .navbar .col:first-child {
+      justify-content: flex-start;
+    }
+
+    .navbar .col:last-child {
+      justify-content: flex-end;
+    }
+
+    .navbar .col a {
+      display: block;
+      margin: 5px 0;
+    }
+
+    .profile-img {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    .explore-foods {
+      font-size: 0.9rem;
+      color: #ffc107;
+      text-decoration: none;
+      margin-left: 15px;
+    }
+
+    .explore-foods:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Navbar -->
+<nav class="navbar navbar-dark bg-dark">
+  <div class="container-fluid d-flex justify-content-between align-items-center">
+    <ul class="navbar-nav flex-row">
+      <li class="nav-item mx-2"><a class="nav-link text-white" href="{% url 'buy' %}">Explore Items</a></li>
+      <li class="nav-item mx-2"><a class="nav-link text-white" href="{% url 'rent' %}">See Rentals</a></li>
+      <li class="nav-item mx-2"><a class="nav-link text-white" href="{% url 'buy_house'%}">View Properties</a></li>
+      <li class="nav-item mx-2"><a class="nav-link text-white" href="{% url 'buy_car' %}">Buy a Car</a></li>
+    </ul>
+    <div class="position-absolute start-50 translate-middle-x">
+      <a class="navbar-brand" href="{% url 'home' %}">
+        <img src="{% static 'logo.png' %}" alt="Logo">
+      </a>
+    </div>
+    <div class="col d-flex justify-content-end">
+      <a href="{% url 'profile' %}">
+            <img id="profileImage" src="profile-image.jpg" alt="Profile Image" class="profile-img" />
+      </a>
+    </div>
+  </div>
+</nav>
+  <!-- Hero Section -->
+  <div class="hero">
+    <div class="hero-text">
+      <h1>Welcome to New_Market</h1>
+      <p>
+        New_Market is your trusted platform for local buying and selling. Whether you're looking to buy household items, rent a house, or purchase a property, we connect real people in your area to make it happen quickly and securely.
+      </p>
+    </div>
+  </div>
+
+  <!-- Main Section -->
+  <div class="container main-section">
+    <div class="row g-4">
+      <!-- Buy Items -->
+      <div class="col-md-3">
+        <div class="section-card">
+          <div id="buyItemsCarousel" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner"></div>
+          </div>
+          <div class="p-3">
+            <h4>Buy Items</h4>
+            <p>Find second-hand or new items being sold by locals in your community.</p>
+            <a href="{% url 'buy' %}" class="btn btn-warning">Explore Items</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Rent House -->
+      <div class="col-md-3">
+        <div class="section-card">
+          <div id="rentCarousel" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner"></div>
+          </div>
+          <div class="p-3">
+            <h4>Rent a House</h4>
+            <p>Browse available houses or apartments for rent near you.</p>
+            <a href="{% url 'rent' %}" class="btn btn-warning">See Rentals</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Buy House -->
+      <div class="col-md-3">
+        <div class="section-card">
+          <div id="buyHouseCarousel" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner"></div>
+          </div>
+          <div class="p-3">
+            <h4>Buy a House</h4>
+            <p>Looking to own a home? Explore verified houses listed for sale.</p>
+            <a href="{% url 'buy_house' %}" class="btn btn-warning">View Properties</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Buy Car -->
+      <div class="col-md-3">
+        <div class="section-card">
+          <div id="buyCarCarousel" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner"></div>
+          </div>
+          <div class="p-3">
+            <h4>Buy a Car</h4>
+            <p>Find verified used and new cars listed for sale by trusted sellers.</p>
+            <a href="{% url 'buy_car' %}" class="btn btn-warning">Browse Cars</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="text-center mt-5">
+    <hr>
+    <p>&copy; 2025 New_Market. All rights reserved.</p>
+  </footer>
+</body>
+
+</html>
