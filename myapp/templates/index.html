@@ -29,34 +29,40 @@
     }
 
     .welcome-box {
-      height: 290px;
       background: rgba(0, 0, 0, 0.75);
-      padding: 10px;
-      border-radius: 10px;
+      padding: 20px;
+      border-radius: 15px;
       text-align: center;
-      max-width: 240px;
+      max-width: 320px;
       width: 100%;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
     }
 
     .btn-lg {
       width: 100%;
-      margin-top: 1px;
-      font-size: 0.5rem;
-      padding: 8px 0;
+      font-size: 1rem;
+      padding: 12px 0;
+      margin-bottom: 10px;
+    }
+
+    .btn-lg:last-child {
+      margin-bottom: 0;
     }
 
     img {
-      height: 50px;
+      height: 100px;
       width: auto;
-      margin-bottom: 5px;
+      margin-bottom: 10px;
     }
 
     h2 {
-      font-size: 1.25rem;
+      font-size: 1.5rem;
+      margin-bottom: 10px;
     }
 
     .lead {
-      font-size: 0.85rem;
+      font-size: 1rem;
+      margin-bottom: 20px;
     }
 
     footer {
@@ -70,7 +76,7 @@
 <body>
   <div class="main-content">
     <div class="welcome-box">
-      <img src="{% static 'logo.png' %}" alt="Logo" style="height: 100px; width: auto;">
+      <img src="{% static 'logo.png' %}" alt="Logo">
       <h2>Welcome to New_Marketplace</h2>
       <p class="lead">Buy, Sell or Rent locally with ease.</p>
 
